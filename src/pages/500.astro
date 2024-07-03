@@ -1,0 +1,28 @@
+---
+import Base from "@/layouts/Base.astro";
+
+export const prerender = true;
+---
+
+<Base title="Internal Server Error">
+  <section class="section-sm text-center">
+    <div class="container">
+      <div class="row justify-center">
+        <div class="sm:col-10 md:col-8 lg:col-6">
+          <span
+            class="text-[8rem] block font-bold text-dark dark:text-darkmode-dark"
+          >
+            500
+          </span>
+          <h1 class="h2 mb-4">Internal Server Error</h1>
+          <div class="content">
+            <p>
+              The page you are seeing means that something went wrong on server side.
+            </p>
+          </div>
+          <a href="/" class="btn btn-primary mt-8">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

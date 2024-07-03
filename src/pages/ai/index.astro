@@ -1,0 +1,43 @@
+---
+import { Button } from "@/components/ui/button";
+import Base from "@/layouts/Base.astro";
+import { Picture } from "astro:assets";
+import writerImage from "@/assets/writer.png";
+
+export const prerender = true;
+
+const title = "诗词 + AI";
+const description = "科技与艺术融合，诗词创作从此变得更有趣而富有创意";
+---
+
+<Base title={title} description={description}>
+  <section class="section px-4 pt-0 pb-0 my-28 mx-auto">
+    <div class="container">
+      <div class="row justify-center items-center mb-14">
+        <div class="text-center sm:col-10 md:col-10 lg:col-10">
+          {/* image in the center */}
+          <div class="flex items-center justify-center">
+            <Picture
+              style={{ height: "400px", width: "400px" }}
+              src={writerImage}
+              alt="ai writer image"
+              widths={[200, 300, 400]}
+              sizes="(max-width: 400px) 100vw, 400px"
+              loading="eager"
+              format="avif"
+            />
+          </div>
+
+          <h2 class="text-lg mt-14 mb-4">诗词 + AI 开发中...</h2>
+          <div class="content">
+            <p>The page you are looking for is still Working In Progress.</p>
+          </div>
+
+          <Button variant="default" className="mt-8 text-lg px-8 py-6">
+            <a href="/"> 返回首页 </a>
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

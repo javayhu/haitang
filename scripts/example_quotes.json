@@ -1,0 +1,49 @@
+{
+    "quotes": [
+        {
+            "id" : 1,
+            "quote" : "何当共剪西窗烛，却话巴山夜雨时。",
+            "dynasty" : "唐",
+            "author_id" : 10009,
+            "author" : "李商隐",
+            "kind" : "shi",
+            "work_id" : 10024,
+            "work_title" : "夜雨寄北",
+            "updated_at" : "2014-07-23 19:53:31",
+            "quote_tr" : "何當共剪西窗燭，卻話巴山夜雨時。",
+            "dynasty_tr" : "唐",
+            "author_tr" : "李商隱",
+            "work_title_tr" : "夜雨寄北"
+        },
+        {
+            "id" : 4,
+            "quote" : "秋阴不散霜飞晚，留得枯荷听雨声。",
+            "dynasty" : "唐",
+            "author_id" : 10009,
+            "author" : "李商隐",
+            "kind" : "shi",
+            "work_id" : 10051,
+            "work_title" : "宿骆氏亭寄怀崔雍崔衮",
+            "updated_at" : "2014-07-23 19:53:31",
+            "quote_tr" : "秋陰不散霜飛晚，留得枯荷聽雨聲。",
+            "dynasty_tr" : "唐",
+            "author_tr" : "李商隱",
+            "work_title_tr" : "宿駱氏亭寄懷崔雍崔袞"
+        },
+        {
+            "id" : 6,
+            "quote" : "试问岭南应不好？却道：此心安处是吾乡。",
+            "dynasty" : "宋",
+            "author_id" : 10001,
+            "author" : "苏轼",
+            "kind" : "ci",
+            "work_id" : 10148,
+            "work_title" : "定风波 · 南海归，赠王定国侍人寓娘",
+            "updated_at" : "2015-10-22 11:27:42",
+            "quote_tr" : "試問嶺南應不好？卻道：此心安處是吾鄉。",
+            "dynasty_tr" : "宋",
+            "author_tr" : "蘇軾",
+            "work_title_tr" : "定風波 · 南海歸，贈王定國侍人寓娘"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+---
+import dateConfig from ".json/date.json";
+
+// 获取今天的日期并格式化为YYYY-MM-DD格式
+const today = new Date();
+// const today = new Date('2024-04-18');
+const dateString = today.toISOString().split('T')[0];
+
+// 根据今天的日期查找对应的id
+const work_id = dateConfig[dateString as keyof typeof dateConfig] || null;
+console.log('today, work_id: ', work_id);
+
+if (!work_id) {
+  return Astro.redirect("/404");
+}
+
+return Astro.redirect(`/works/${work_id}`);
+---

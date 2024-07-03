@@ -1,0 +1,19 @@
+---
+import config from "@/config/config.json";
+import RegisterForm from "@/components/RegisterForm";
+import Base from "@/layouts/Base.astro";
+
+export const prerender = false;
+
+// const title = "Register";
+const title = "注册";
+const meta_title = "注册" + " - " + config.site.title;
+---
+
+<Base title={title} meta_title={meta_title}>
+  <main
+    class="py-28 px-4 flex-1 flex flex-col gap-4 items-center justify-center"
+  >
+    <RegisterForm client:load />
+  </main>
+</Base>

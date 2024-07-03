@@ -1,0 +1,83 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import PageHeader from "@/partials/PageHeader.astro";
+import { asc, eq, lt, gte, ne } from "drizzle-orm";
+import {
+  table_collection_works,
+  table_collections,
+} from "@/database/schema_sqlite";
+import { localdb as db } from "@/database/localdb";
+import SubTitle from "@/partials/SubTitle.astro";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const list = await db.select().from(table_collections);
+  return list.map((item) => {
+    return {
+      params: { id: item.id },
+    };
+  });
+}
+
+const { id } = Astro.params;
+
+const collection = (
+  await db.select().from(table_collections).where(eq(table_collections.id, id))
+)[0];
+
+const works = await db
+  .select()
+  .from(table_collection_works)
+  .where(eq(table_collection_works.collection_id, id))
+  .orderBy(asc(table_collection_works.show_order));
+
+const title = collection?.name;
+const meta_title = collection?.name + " - " + config.site.title;
+const description = collection.desc ? collection.desc.slice(0, 300) : collection.name;
+const canonical = config.site.base_url + `/collections/${id}`;
+---
+
+<Base meta_title={meta_title} description={description} canonical={canonical}>
+  <PageHeader title={title} desc={collection.desc} />
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <!-- 诗集简介，挪到PageHeader中 -->
+      <!-- <div class="flex items-center mb-4 mt-14">
+        <span class="bg-red-500 w-1 h-4 inline-block rounded mr-2"></span>
+        <h3 class="text-lg">简介</h3>
+      </div>
+      <span class="">{collection.desc}</span> -->
+
+      <!-- 作品列表 -->
+      <!-- grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 -->
+      <SubTitle title="作品" description={`(${works.length})`} />
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        {
+          works.map((work, index) => (
+            <div>
+              <a data-astro-reload
+                href={`/works/${work.work_id}`}
+                title={work.work_title}
+                class="text-sm cursor-pointer"
+              >
+                <Card className="hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out">
+                  <CardHeader>
+                    <CardTitle className="text-sm line-clamp-1">{work.work_title}</CardTitle>
+                    <CardDescription className="pt-2 text-sm line-clamp-1">
+                      {work.work_dynasty} - {work.work_author}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

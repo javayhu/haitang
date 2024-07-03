@@ -1,0 +1,56 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import { localdb as db } from "@/database/localdb";
+import {
+  table_dynasties,
+  table_works,
+} from "@/database/schema_sqlite";
+import { asc, desc } from "drizzle-orm";
+import CategoryElements from "@/components/CategoryElements";
+
+export const prerender = true;
+
+const dynasties = await db
+  .select()
+  .from(table_dynasties)
+  .orderBy(asc(table_dynasties.start_year));
+
+const works = await db.select().from(table_works);
+
+let worksByDynasty = dynasties.map((dynasty) => {
+  return {
+    kind: dynasty,
+    items: works.filter((work) => work.dynasty === dynasty.name),
+  };
+});
+
+worksByDynasty = worksByDynasty.map((dynasty) => ({
+  ...dynasty,
+  // kind: dynasty.kind,
+  items: dynasty.items.map((work) => ({
+    ...work,
+    id: work.id,
+    href: `/works/${work.id}`,
+    name: work.quotes_count >= 2 ? `${work.title} 🔥` : work.title,
+  })),
+}));
+// console.log(worksByDynasty);
+
+const title = "诗词" + " - " + config.site.title; // "Works";
+const description = '所有诗词列表';
+const canonical = config.site.base_url + `/works`;
+---
+
+<Base title={title} description={description} canonical={canonical}>
+  <!-- <PageHeader title={title} /> -->
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <CategoryElements
+        client:load
+        categories={dynasties}
+        elementsByCategory={worksByDynasty}
+      />
+    </div>
+  </section>
+</Base>

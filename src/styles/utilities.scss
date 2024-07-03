@@ -1,0 +1,42 @@
+.bg-gradient {
+  @apply bg-gradient-to-b from-[rgba(249,249,249,1)] from-[0.53%] to-white to-[83.28%] dark:from-darkmode-theme-light dark:to-darkmode-body;
+}
+
+.rounded-sm {
+  @apply rounded-[4px];
+}
+.rounded {
+  @apply rounded-[6px];
+}
+.rounded-lg {
+  @apply rounded-[12px];
+}
+.rounded-xl {
+  @apply rounded-[16px];
+}
+
+.shadow {
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.05);
+}
+
+/* ChatGPT实现的下划线动画 */
+/* color: inherit; 可选：保持链接颜色与周围文本一致 */
+.animated-underline {
+  position: relative;
+  text-decoration: none; /* 移除默认的下划线 */
+  background-repeat: no-repeat;
+  background-size: 0% 2px; /* 初始背景大小：宽度为0%，高度为下划线的厚度 */
+  background-position: 0% 100%; /* 背景位置：水平方向0%，垂直方向在元素底部 */
+  transition: background-size 0.3s ease-in-out; /* 动画效果 */
+  background-image: linear-gradient(to right, #f56565 100%, #f56565 0%); /* 使用线性渐变创建下划线效果 */
+}
+
+.animated-underline:hover,
+.animated-underline:focus {
+  background-size: 100% 2px; /* 鼠标悬停和聚焦时，背景宽度变为100%，高度保持不变 */
+}
+
+/* 跳到顶部，由于导航栏是sticky的，高度是98px，所以要调整scroll的距离 */
+.back-to-top-offset {
+  scroll-margin-top: 98px;
+}

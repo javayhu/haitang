@@ -1,0 +1,206 @@
+---
+import { UI } from "@/utils/config";
+
+---
+
+<script is:inline define:vars={{ defaultTheme: UI.theme }}>
+  if (window.basic_script) {
+    return;
+  }
+
+  window.basic_script = true;
+
+  // change giscus theme
+  // https://thezal.dev/article_giscus_astro/
+  function setGiscusTheme(theme) {
+    console.log("setGiscusTheme", theme);
+    const iframe = document.querySelector("iframe.giscus-frame");
+    if (!iframe) {
+      const giscusScript = document.getElementById("giscus-script");
+      if (giscusScript) {
+        console.log("setGiscusTheme, iframe not found but script found");
+        giscusScript.setAttribute("data-theme", theme);
+      }
+      return;
+    }
+    console.log("setGiscusTheme, giscus iframe found");
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme } } },
+      "https://giscus.app",
+    );
+  }
+
+  // change toaster theme
+  function setToasterTheme(theme) {
+    console.log("setToasterTheme", theme);
+    const toaster = document.getElementById("toaster");
+    if (toaster) {
+      console.log("setToasterTheme, toaster found");
+      toaster.setAttribute("theme", theme);
+    } else {
+      console.log("setToasterTheme, toaster not found");
+    }
+  }
+
+  // dark mode theme
+  function applyTheme(theme) {
+    console.log("applyTheme", theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+      setGiscusTheme("dark");
+      setToasterTheme("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      setGiscusTheme("light");
+      setToasterTheme("light");
+    }
+  }
+
+  const initTheme = function () {
+    if (
+      (defaultTheme && defaultTheme.endsWith(":only")) ||
+      (!localStorage.theme && defaultTheme !== "system")
+    ) {
+      applyTheme(defaultTheme.replace(":only", ""));
+    } else if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      applyTheme("dark");
+    } else {
+      applyTheme("light");
+    }
+  };
+  initTheme();
+
+  function attachEvent(selector, event, fn) {
+    const matches =
+      typeof selector === "string"
+        ? document.querySelectorAll(selector)
+        : selector;
+    if (matches && matches.length) {
+      matches.forEach((elem) => {
+        elem.addEventListener(event, (e) => fn(e, elem), false);
+      });
+    }
+  }
+
+  const onLoad = function () {
+    let lastKnownScrollPosition = window.scrollY;
+    let ticking = true;
+
+    // click button for switch theme
+    attachEvent("[data-aw-toggle-color-scheme]", "click", function () {
+      if (defaultTheme.endsWith(":only")) {
+        return;
+      }
+      document.documentElement.classList.toggle("dark");
+      localStorage.theme = document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light";
+
+      setGiscusTheme(localStorage.theme);
+      setToasterTheme(localStorage.theme);
+    });
+
+    // header nav menu events
+    attachEvent("#header nav", "click", function () {
+      document
+        .querySelector("[data-aw-toggle-menu]")
+        ?.classList.remove("expanded");
+      document.body.classList.remove("overflow-hidden");
+      document.getElementById("header")?.classList.remove("h-screen");
+      document.getElementById("header")?.classList.remove("expanded");
+      document.querySelector("#header nav")?.classList.add("hidden");
+      document.querySelector("#header-actions")?.classList.add("hidden");
+    });
+
+    attachEvent("[data-aw-toggle-menu]", "click", function (_, elem) {
+      elem.classList.toggle("expanded");
+      document.body.classList.toggle("overflow-hidden");
+      document.getElementById("header")?.classList.toggle("h-screen");
+      document.getElementById("header")?.classList.toggle("expanded");
+      document.querySelector("#header nav")?.classList.toggle("hidden");
+      document.querySelector("#header-actions")?.classList.toggle("hidden");
+    });
+
+    // mobile nav menus
+    let screenSize = window.matchMedia("(max-width: 767px)");
+    screenSize.addEventListener("change", function () {
+      document
+        .querySelector("[data-aw-toggle-menu]")
+        ?.classList.remove("expanded");
+      document.body.classList.remove("overflow-hidden");
+      document.getElementById("header")?.classList.remove("h-screen");
+      document.getElementById("header")?.classList.remove("expanded");
+      document.querySelector("#header nav")?.classList.add("hidden");
+      document.querySelector("#header-actions")?.classList.add("hidden");
+    });
+
+    // header sticky when scroll
+    function applyHeaderStylesOnScroll() {
+      const header = document.querySelector("#header[data-aw-sticky-header]");
+      if (
+        lastKnownScrollPosition > 60 &&
+        !header.classList.contains("scroll")
+      ) {
+        document.getElementById("header").classList.add("scroll");
+      } else if (
+        lastKnownScrollPosition <= 60 &&
+        header.classList.contains("scroll")
+      ) {
+        document.getElementById("header").classList.remove("scroll");
+      }
+      ticking = false;
+    }
+    applyHeaderStylesOnScroll();
+
+    attachEvent([document], "scroll", function () {
+      lastKnownScrollPosition = window.scrollY;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          applyHeaderStylesOnScroll();
+        });
+        ticking = true;
+      }
+    });
+
+    // back to top
+    window.addEventListener("scroll", function () {
+      let btt = document.getElementById("btt");
+
+      if (window.scrollY >= 512) {
+        btt.classList.remove("hidden");
+        btt.classList.add("block");
+      } else {
+        btt.classList.add("hidden");
+        btt.classList.remove("block");
+      }
+    });
+  };
+
+  const onPageShow = function () {
+    // back to top smooth scroll
+    document.documentElement.classList.add("motion-safe:scroll-smooth");
+    const elem = document.querySelector("[data-aw-toggle-menu]");
+    if (elem) {
+      elem.classList.remove("expanded");
+    }
+    document.body.classList.remove("overflow-hidden");
+    document.getElementById("header")?.classList.remove("h-screen");
+    document.getElementById("header")?.classList.remove("expanded");
+    document.querySelector("#header nav")?.classList.add("hidden");
+  };
+
+  window.onload = onLoad;
+  window.onpageshow = onPageShow;
+
+  document.addEventListener("astro:after-swap", () => {
+    console.log("astro:after-swap, init theme");
+    initTheme();
+    onLoad();
+    onPageShow();
+  });
+</script>

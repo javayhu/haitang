@@ -1,0 +1,34 @@
+---
+import { Button } from "@/components/ui/button";
+import { Icon } from "astro-icon/components";
+
+const {
+  avatarurl = "",
+  username = "",
+  useremail = "",
+}: { avatarurl?: string; username?: string; useremail?: string } = Astro.props;
+---
+
+<section>
+  <div class="container text-center">
+    <div class="rounded-2xl pt-14">
+      <div class="flex items-center justify-center">
+        <!-- 显示圆形头像 -->
+        {
+          avatarurl ? (
+            <img src={avatarurl} alt="avatar" class="rounded-full w-8 h-8 mr-2" />
+          ) : (
+            <Icon name="tabler:user-circle" class="w-8 h-8 mr-2" />
+          )
+        }
+        
+        <!-- 显示用户名 -->
+        <h1 class="text-xl font-semibold inline" set:text={username} />
+      </div>
+      <p class="mt-4">{useremail}</p>
+      <Button variant="outline" className="text-sm mt-8">
+        <a data-astro-reload href="/api/auth/signout"> 退出登录 </a>
+      </Button>
+    </div>
+  </div>
+</section>

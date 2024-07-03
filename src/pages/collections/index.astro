@@ -1,0 +1,79 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import { localdb as db } from "@/database/localdb";
+import {
+  table_collection_kinds,
+  table_collections,
+} from "@/database/schema_sqlite";
+import { asc, eq } from "drizzle-orm";
+import CategoryElements from "@/components/CategoryElements";
+
+export const prerender = true;
+
+let collectionKinds = await db
+  .select()
+  .from(table_collection_kinds)
+  .orderBy(asc(table_collection_kinds.show_order));
+// console.log(collectionKinds);
+
+const collections = await db
+  .select()
+  .from(table_collections)
+  .where(eq(table_collections.online_data, 0));
+// console.log(collections);
+
+let collectionsByKind = collectionKinds.map((collectionKind) => {
+  return {
+    kind: collectionKind,
+    items: collections.filter(
+      (collection) => collection.kind_id === collectionKind.id,
+    ),
+  };
+});
+
+collectionsByKind = collectionsByKind.filter(
+  (collectionByKind) => collectionByKind.items.length > 0,
+);
+// console.log(collectionsByKind);
+
+// filter collectionKinds, keep only kinds in collectionsByKind
+collectionKinds = collectionKinds.filter((collectionKind) => {
+  return collectionsByKind.some((collectionByKind) => {
+    return collectionByKind.kind.id === collectionKind.id;
+  });
+});
+
+// update collectionsByKind, each item add a href, to be used in CategoryElements
+collectionsByKind = collectionsByKind.map((dynasty) => ({
+  ...dynasty,
+  // kind: dynasty.kind,
+  items: dynasty.items.map((collection) => ({
+    ...collection,
+    id: collection.id,
+    href: `/collections/${collection.id}`,
+    name:
+      collection.quotes_count >= 30
+        ? `# ${collection.name} 🔥`
+        : `# ${collection.name}`,
+  })),
+}));
+// console.log(collectionsByKind);
+
+const title = "诗集" + " - " + config.site.title; // "Collections";
+const description = "所有诗集列表";
+const canonical = config.site.base_url + `/collections`;
+---
+
+<Base title={title} description={description} canonical={canonical}>
+  <!-- <PageHeader title={title} /> -->
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <CategoryElements
+        client:load
+        categories={collectionKinds}
+        elementsByCategory={collectionsByKind}
+      />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,146 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import PageHeader from "@/partials/PageHeader.astro";
+import { localdb as db } from "@/database/localdb";
+import {
+  table_dynasties,
+  table_works,
+  table_authors,
+} from "@/database/schema_sqlite";
+import { desc, eq, lt, gte, ne } from "drizzle-orm";
+import { Button } from "@/components/ui/button";
+import SubTitle from "@/partials/SubTitle.astro";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const list = await db.select().from(table_dynasties);
+  return list.map((item) => {
+    return {
+      params: { name: item.name },
+    };
+  });
+}
+
+const { name } = Astro.params;
+
+const dynasty = (
+  await db.select().from(table_dynasties).where(eq(table_dynasties.name, name))
+)[0];
+
+const authors = await db
+  .select()
+  .from(table_authors)
+  .where(eq(table_authors.dynasty, dynasty.name))
+  .orderBy(desc(table_authors.views_count));
+
+const works = await db
+  .select()
+  .from(table_works)
+  .where(eq(table_works.dynasty, dynasty.name))
+  .orderBy(desc(table_works.show_order));
+
+// const description = `诗人:${authors.length} 作品: ${works.length}`;
+const title = dynasty.name;
+const meta_title = dynasty.name + " - " + config.site.title;
+const description = dynasty.intro ? dynasty.intro.slice(0, 300) : dynasty.name;
+const canonical = config.site.base_url + `/dynasties/${name}`;
+---
+
+<Base meta_title={meta_title} description={description} canonical={canonical}>
+  <PageHeader title={title} />
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <div class="justify-center mt-10 flex flex-row gap-6">
+        <Button variant="default" size="sm" className="">
+          <a href="#authors">
+            诗人({authors.length})
+          </a>
+        </Button>
+
+        <Button variant="outline" size="sm" className="">
+          <a href="#works">
+            作品({works.length})
+          </a>
+        </Button>
+      </div>
+
+      <!-- 朝代简介 -->
+      <SubTitle title="简介" description="" />
+      <span class="">{dynasty.intro}</span>
+
+      <!-- 诗人列表 -->
+      <SubTitle id="authors" title="诗人" description={`(${authors.length})`} />
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        {
+          authors.map((author, index) => (
+            <div>
+              <a
+                href={`/authors/${author.id}`}
+                title={author.name}
+                class="text-sm cursor-pointer"
+              >
+                <Card className="hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out">
+                  <CardHeader>
+                    <CardTitle className="text-sm line-clamp-1">
+                      {author.name}
+                      {author.quotes_count >= 2 && ` 🔥`}
+                    </CardTitle>
+                    <CardDescription className="pt-2 text-sm line-clamp-1">
+                      {author.intro === null ||
+                      author.intro === "" ||
+                      author.intro === "undefined" ||
+                      author.intro === "NONE" ||
+                      author.intro === "None"
+                        ? "暂无简介"
+                        : author.intro}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- 作品列表 -->
+      <SubTitle id="works" title="作品" description={`(${works.length})`} />
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        {
+          works.map((work, index) => (
+            <div>
+              <a data-astro-reload
+                href={`/works/${work.id}`}
+                title={work.title}
+                class="text-sm cursor-pointer"
+              >
+                <Card className="hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out">
+                  <CardHeader>
+                    <CardTitle className="text-sm line-clamp-1">
+                      {work.title}
+                      {work.quotes_count >= 2 && ` 🔥`}
+                    </CardTitle>
+                    <CardDescription className="pt-2 text-sm line-clamp-1">
+                      {work.dynasty} - {work.author}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,249 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Logo from "@/components/Logo.astro";
+import ToggleTheme from "@/components/ToggleTheme.astro";
+import ToggleMenu from "@/components/ToggleMenu.astro";
+import HeaderBackground from "@/layouts/partials/HeaderBackground.astro";
+
+import { trimSlash, getAsset } from "@/utils/permalinks";
+import { Button } from "@/components/ui/button";
+
+interface Link {
+  text?: string;
+  href?: string;
+  ariaLabel?: string;
+  icon?: string;
+}
+
+interface ActionLink extends Link {
+  target?: "_blank" | "_self" | "_parent" | "_top";
+}
+
+interface MenuLink extends Link {
+  links?: Array<MenuLink>;
+}
+
+export interface Props {
+  id?: string;
+  links?: Array<MenuLink>;
+  actions?: Array<ActionLink>;
+  isSticky?: boolean;
+  isDark?: boolean;
+  isFullWidth?: boolean;
+  showSearch?: boolean;
+  showToggleTheme?: boolean;
+  showRssFeed?: boolean;
+  showTwitter?: boolean;
+  showGithub?: boolean;
+  position?: string;
+}
+
+const {
+  id = "header",
+  links = [],
+  actions = [],
+  isSticky = false,
+  isDark = false,
+  isFullWidth = false,
+  showSearch = false,
+  showToggleTheme = false,
+  showRssFeed = false,
+  showTwitter = false,
+  showGithub = false,
+  position = "center",
+} = Astro.props;
+
+const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
+---
+
+<header
+  class:list={[
+    { sticky: isSticky, relative: !isSticky, dark: isDark },
+    "top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out",
+  ]}
+  {...isSticky ? { "data-aw-sticky-header": true } : {}}
+  {...id ? { id } : {}}
+>
+  <div class="absolute inset-0"></div>
+
+  <HeaderBackground />
+
+  <div
+    class:list={[
+      "relative mx-auto w-full py-3 px-4 xl:px-0 md:flex md:justify-between",
+      {
+        "max-w-7xl": !isFullWidth,
+      },
+    ]}
+  >
+    <div
+      class:list={[{ "mr-auto": position === "right" }, "flex justify-between"]}
+    >
+      <div class="flex items-center justify-center">
+        <Logo />
+      </div>
+      <div class="flex items-center md:hidden">
+        <ToggleMenu />
+      </div>
+    </div>
+
+    <!-- header center section, main navigation menus -->
+    <nav
+      class="hidden items-center w-full overflow-y-auto overflow-x-hidden md:w-auto md:flex md:overflow-y-visible md:overflow-x-auto md:mx-5"
+      aria-label="Main navigation"
+    >
+      <ul
+        class="flex flex-col w-full font-medium md:w-auto md:flex-row md:self-center"
+      >
+        {
+          links.map(({ text, href, links }) => (
+            <li class={links?.length ? "dropdown" : ""}>
+              {links?.length ? (
+                <>
+                  <button class="flex items-center w-full px-4 py-3 whitespace-no-wrap rounded hover:text-dark dark:hover:text-darkmode-dark">
+                    {text}{" "}
+                    <Icon
+                      name="tabler:chevron-down"
+                      class="w-3.5 h-3.5 ml-0.5 hidden md:inline"
+                    />
+                  </button>
+                  <ul class="dropdown-menu md:backdrop-blur-md dark:md:bg-dark rounded md:absolute pl-4 md:pl-0 md:hidden font-medium md:bg-white/90 md:min-w-[200px] drop-shadow-xl">
+                    {links.map(({ text: text2, href: href2 }) => (
+                      <li>
+                        <a
+                          class:list={[
+                            "first:rounded-t last:rounded-b py-2 px-5 block whitespace-no-wrap hover:text-dark dark:hover:text-darkmode-dark md:hover:bg-gray-100 dark:hover:bg-gray-800",
+                            { "aw-link-active": href2 === currentPath },
+                          ]}
+                          href={href2}
+                        >
+                          {text2}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <a
+                  class:list={[
+                    "flex items-center py-3 px-4 whitespace-no-wrap rounded hover:text-dark dark:hover:text-darkmode-dark",
+                    { "aw-link-active": href === currentPath },
+                  ]}
+                  href={href}
+                >
+                  {text}
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- header right section, action buttons -->
+    <div
+      id="header-actions"
+      class:list={[
+        { "ml-auto": position === "left" },
+        "hidden items-center fixed w-full justify-end left-0 bottom-0 p-3 md:self-center md:flex md:mb-0 md:w-auto md:static md:p-0",
+      ]}
+    >
+      <div class="items-center flex justify-between w-full md:w-auto">
+        <div class="flex">
+          <!-- search -->
+          {
+            showSearch && (
+              <span
+                class="cursor-pointer rounded-lg text-sm p-2.5 inline-flex items-center hover:bg-gray-200 dark:hover:bg-gray-800"
+                aria-label="Search"
+                data-search-trigger
+              >
+                <Icon
+                  name="tabler:search"
+                  class="w-6 h-6 md:w-5 md:h-5 md:inline-block"
+                />
+              </span>
+            )
+          }
+
+          <!-- toggle theme -->
+          {
+            showToggleTheme && (
+              <ToggleTheme iconClass="w-6 h-6 block md:w-5 md:h-5 md:inline-block" />
+            )
+          }
+
+          <!-- RSS feed -->
+          {
+            showRssFeed && (
+              <a
+                class="rounded-lg text-sm p-2.5 inline-flex items-center hover:bg-gray-200 dark:hover:bg-gray-800"
+                aria-label="RSS Feed"
+                href={getAsset("/rss.xml")}
+              >
+                <Icon
+                  name="tabler:rss"
+                  class="w-6 h-6 md:w-5 md:h-5 md:inline-block"
+                />
+              </a>
+            )
+          }
+
+          <!-- Twitter -->
+          {
+            showTwitter && (
+              <a
+                class="rounded-lg text-sm p-2.5 inline-flex items-center hover:bg-gray-200 dark:hover:bg-gray-800"
+                aria-label="Twitter"
+                target="_blank"
+                href="https://twitter.com/javayhu"
+              >
+                <Icon
+                  name="tabler:brand-twitter"
+                  class="w-6 h-6 md:w-5 md:h-5 md:inline-block"
+                />
+              </a>
+            )
+          }
+
+          <!-- Github -->
+          {
+            showGithub && (
+              <a
+                class="rounded-lg text-sm p-2.5 inline-flex items-center hover:bg-gray-200 dark:hover:bg-gray-800"
+                aria-label="Github"
+                target="_blank"
+                href="https://github.com/javayhu"
+              >
+                <Icon
+                  name="tabler:brand-github"
+                  class="w-6 h-6 md:w-5 md:h-5 md:inline-block"
+                />
+              </a>
+            )
+          }
+        </div>
+
+        <!-- call to action buttons -->
+        {
+          actions?.length ? (
+            <span class="ml-4">
+              {actions.map((btnProps) => (
+                <Button
+                  variant="default"
+                  className="text-sm shadow-none font-semibold px-5 py-1.5"
+                  data-search-trigger
+                >
+                  {btnProps.text}
+                </Button>
+              ))}
+            </span>
+          ) : (
+            ""
+          )
+        }
+      </div>
+    </div>
+  </div>
+</header>

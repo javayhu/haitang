@@ -1,0 +1,69 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import PageHeader from "@/partials/PageHeader.astro";
+import { localdb as db } from "@/database/localdb";
+import {
+  table_authors,
+  table_dynasties,
+  table_works,
+} from "@/database/schema_sqlite";
+import { asc, desc } from "drizzle-orm";
+import CategoryElements from "@/components/CategoryElements";
+
+export const prerender = true;
+
+const title = "诗人" + " - " + config.site.title; // "Authors";
+
+let dynasties = await db
+  .select()
+  .from(table_dynasties)
+  .orderBy(asc(table_dynasties.start_year));
+
+// 暂时不以views_count来排序，这样的话hot显示就会更好看些，避免扎堆
+let authors = await db.select().from(table_authors);
+/* .orderBy(desc(table_authors.views_count)) */ const works = await db
+  .select()
+  .from(table_works);
+
+// filter authors, keep the authors who has at least 1 work
+authors = authors.filter((author) => {
+  return works.filter((work) => work.author === author.name).length > 0;
+});
+
+let authorsByDynasty = dynasties.map((dynasty) => {
+  return {
+    kind: dynasty,
+    items: authors.filter((author) => author.dynasty === dynasty.name),
+  };
+});
+
+// update authorsByDynasty, each item add a href, to be used in CategoryElements
+authorsByDynasty = authorsByDynasty.map((dynasty) => ({
+  ...dynasty,
+  // kind: dynasty.kind,
+  items: dynasty.items.map((author) => ({
+    ...author,
+    id: author.id,
+    href: `/authors/${author.id}`,
+    name: author.views_count >= 500 ? `${author.name} 🔥` : author.name,
+  })),
+}));
+// console.log(authorsByDynasty);
+
+const description = '所有诗人列表';
+const canonical = config.site.base_url + `/authors`;
+---
+
+<Base title={title} description={description} canonical={canonical}>
+  <!-- <PageHeader title={title} /> -->
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <CategoryElements
+        client:load
+        categories={dynasties}
+        elementsByCategory={authorsByDynasty}
+      />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,69 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import { localdb as db } from "@/database/localdb";
+import { table_dynasties } from "@/database/schema_sqlite";
+import { asc, desc } from "drizzle-orm";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+
+export const prerender = true;
+
+let dynasties = await db
+  .select()
+  .from(table_dynasties)
+  .orderBy(asc(table_dynasties.start_year));
+
+// dynasties = dynasties.map((dynasty) => {
+//   return {
+//     ...dynasty,
+//     name: dynasty.id === 10006 || dynasty.id === 10001 || dynasty.id === 10009
+//       ? `${dynasty.name} 🔥` : dynasty.name,
+//   }
+// })
+
+const title = "朝代" + " - " + config.site.title;
+const description = "所有朝代列表";
+const canonical = config.site.base_url + `/dynasties`;
+---
+
+<Base title={title} description={description} canonical={canonical}>
+  <!-- <PageHeader title={title} /> -->
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <div
+        class="pt-20 pb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        {
+          dynasties.map((dynasty) => (
+            <a
+              href={`/dynasties/${dynasty.name}`}
+              class="text-sm cursor-pointer"
+            >
+              <Card className="hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out">
+                <CardHeader>
+                  <CardTitle className="text-sm line-clamp-1">
+                    {dynasty.name}
+                    {/* 给唐宋元增加🔥，同时不影响链接跳转 */}
+                    {dynasty.id === 10006 ||
+                    dynasty.id === 10001 ||
+                    dynasty.id === 10009
+                      ? ` 🔥`
+                      : ""}
+                  </CardTitle>
+                  <CardDescription className="pt-2 line-clamp-2">
+                    {dynasty.intro}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

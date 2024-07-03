@@ -1,0 +1,57 @@
+---
+import ImageMod from "@/components/ImageMod.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { getEntry } from "astro:content";
+
+const testimonial = await getEntry("sections", "testimonial");
+---
+
+<div class="text-gray-600 dark:text-gray-300">
+  <div class="mb-20 space-y-4 px-6 md:px-0">
+    <h2
+      class="text-center font-bold text-2xl lg:text-4xl text-gray-800 dark:text-white"
+    >
+      {markdownify(testimonial.data.title)}
+    </h2>
+    <p class="text-center mt-4 text-gray-500 dark:text-gray-300">
+      {markdownify(testimonial.data.description)}
+    </p>
+  </div>
+
+  <div class="md:columns-2 lg:columns-3 gap-8 space-y-8">
+    <!-- 数量不能是奇数，必须是偶数个，显示效果才是正确的 -->
+    {
+      testimonial.data.members.map(
+        (item: {
+          avatar: string;
+          content: string;
+          name: string;
+          designation: string;
+        }) => (
+          <div class="aspect-auto p-8 border border-gray-100 rounded-3xl bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl shadow-gray-600/10 dark:shadow-none">
+            <div class="flex gap-4">
+              <ImageMod
+                loading="lazy"
+                height={400}
+                width={400}
+                class="w-12 h-12 rounded-full"
+                src={item.avatar}
+                alt={item.name}
+                format="webp"
+              />
+              <div>
+                <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">
+                  {item.name}
+                </h3>
+                <p class="text-sm text-gray-500 dark:text-gray-300">
+                  {item.designation}
+                </p>
+              </div>
+            </div>
+            <p class="mt-8" set:html={markdownify(item.content)} />
+          </div>
+        ),
+      )
+    }
+  </div>
+</div>

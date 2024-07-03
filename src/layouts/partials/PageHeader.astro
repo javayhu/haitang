@@ -1,0 +1,16 @@
+---
+const { title = "", desc = "" }: { title?: string; desc?: string } = Astro.props;
+---
+
+<section>
+  <div class="container text-center">
+    <!-- bg-gradient-to-b from-body to-theme-light
+        dark:from-darkmode-body dark:to-darkmode-theme-light -->
+    <div class="rounded-2xl pt-14">
+      <!-- humanize(title) -->
+      <h1 class="text-2xl" set:text={title} />
+      <p class="mt-4">{desc}</p>
+      <!-- <Breadcrumbs className="mt-6" /> -->
+    </div>
+  </div>
+</section>

@@ -1,0 +1,17 @@
+---
+export interface Props {
+  id?: string;
+  title?: string;
+  description?: string;
+}
+
+const { id = "", title = "", description = "", ...rest } = Astro.props;
+---
+
+<div id={id} class="back-to-top-offset flex items-center mb-4 mt-14">
+  <span class="bg-red-500 w-1 h-4 inline-block rounded mr-2"></span>
+  <h2 class="text-lg">
+    {title}
+    <span class="text-sm text-light">{description}</span>
+  </h2>
+</div>

@@ -1,0 +1,29 @@
+html {
+  // @apply md:text-base;
+}
+
+body {
+  @apply font-normal leading-relaxed bg-body dark:bg-darkmode-body text-text dark:text-darkmode-text;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold leading-tight text-dark dark:text-darkmode-dark;
+}
+
+b,
+strong {
+  @apply font-semibold;
+}
+
+code {
+  @apply after:border-none;
+}
+
+blockquote > p {
+  @apply my-0 #{!important};
+}

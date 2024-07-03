@@ -1,0 +1,35 @@
+---
+import Base from "@/layouts/Base.astro";
+
+export const prerender = true;
+
+const dev = import.meta.env.DEV;
+const prod = import.meta.env.PROD;
+const mode = import.meta.env.MODE;
+const baseUrl = import.meta.env.BASE_URL;
+
+// // https://vercel.com/docs/projects/environment-variables/system-environment-variables
+const ci = import.meta.env.CI;
+const vercelEnv = import.meta.env.VERCEL_ENV;
+const vercelUrl = import.meta.env.VERCEL_URL;
+const gitCommitSha = import.meta.env.VERCEL_GIT_COMMIT_SHA;
+
+// https://vercel.com/docs/projects/environment-variables/system-environment-variables#framework-environment-variables
+// Frameworks typically use a prefix in order to expose Environment Variables to the browser.
+// The following prefixed Environment Variables will be available during the Build Step, based on the Project's selected Framework Preset.
+const publicVercelEnv = import.meta.env.PUBLIC_VERCEL_ENV;
+const publicVercelUrl = import.meta.env.PUBLIC_VERCEL_URL;
+const publicGitCommitSha = import.meta.env.PUBLIC_VERCEL_GIT_COMMIT_SHA;
+---
+
+<Base title="INFO">
+  <section class="section">
+    <div class="container">
+      <div>
+        <!-- show all meta env keys and values in the footer -->
+        <pre
+          class="justify-start text-start">{JSON.stringify(import.meta.env, null, 2)}</pre>
+      </div>
+    </div>
+  </section>
+</Base>

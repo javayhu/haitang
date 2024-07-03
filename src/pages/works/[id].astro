@@ -1,0 +1,238 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import { asc, eq } from "drizzle-orm";
+import {
+  table_collection_works,
+  table_works,
+  table_quotes,
+} from "@/database/schema_sqlite";
+import { localdb as db } from "@/database/localdb";
+import SubTitle from "@/partials/SubTitle.astro";
+import Giscus from "@/components/Giscus.astro";
+import FavoriteButton from "@/components/FavoriteButton";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const list = await db.select().from(table_works);
+  return list.map((item) => {
+    return {
+      params: { id: item.id },
+    };
+  });
+}
+
+const { id } = Astro.params;
+
+const work = (
+  await db.select().from(table_works).where(eq(table_works.id, id))
+)[0];
+// console.log(work);
+
+const author_id = work.author_id;
+const author_name = work.author;
+
+const collections = await db
+  .select()
+  .from(table_collection_works)
+  .where(eq(table_collection_works.work_id, id))
+  .orderBy(asc(table_collection_works.show_order));
+
+const quotes = await db
+  .select()
+  .from(table_quotes)
+  .where(eq(table_quotes.work_id, id));
+
+const title = work.title;
+const meta_title = work.title + " - " + author_name + " - " + config.site.title;
+// console.log("work title: ", title, ", layout: ", work.layout);
+// const description = work.intro ? work.intro.slice(0, 100) : work.title;
+const description = work.content ? work.content.slice(0, 160) : work.title;
+const canonical = config.site.base_url + `/works/${id}`;
+// console.log('astro canonical: ', Astro.url);
+---
+
+<Base meta_title={meta_title} description={description} canonical={canonical}>
+  <!-- <PageHeader title={title} /> -->
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <!-- 作品内容 -->
+      <div class="mx-auto flex flex-col">
+        <div class="mt-14">
+          <h1 class="text-2xl text-center">{work.title}</h1>
+
+          <div class="flex justify-center items-center mb-4 mt-8">
+            <!-- <span class="mr-2">[{work.dynasty}]</span> -->
+            <a
+              href={`/dynasties/${work.dynasty}`}
+              class="animated-underline p-1 text-gray-500 dark:text-gray-300"
+              >[{work.dynasty}]</a
+            >
+            <a
+              href={`/authors/${author_id}`}
+              class="animated-underline p-1 text-gray-500 dark:text-gray-300"
+              >{author_name}</a
+            >
+          </div>
+
+          <!-- 居中布局 -->
+          {
+            work.layout == "center" && (
+              <div class="flex justify-center">
+                <pre
+                  class="whitespace-pre-wrap leading-loose 
+                  text-dark dark:text-darkmode-dark"
+                >{work.content}
+                </pre>
+              </div>
+            )
+          }
+
+          <!-- 段落布局，暂时和居中布局效果一样 -->
+          {
+            work.layout == "indent" && (
+              <div class="flex justify-center">
+                <pre
+                  class="whitespace-pre-wrap leading-loose 
+                      text-dark dark:text-darkmode-dark"
+                >{work.content}
+                </pre>
+              </div>
+            )
+          }
+
+        </div>
+      </div>
+
+      <div class="mt-10 justify-center flex flex-row gap-6">
+        <FavoriteButton
+          client:load
+          works_id={work.id}
+          works_title={work.title}
+          works_author={work.author}
+          works_dynasty={work.dynasty}
+        />
+      </div>
+
+      <div class="flex flex-col gap-4 md:flex-row md:gap-20">
+        <div class="md:flex-1">
+          <!-- 诗集列表 -->
+          {
+            collections.length ? (
+              <>
+                <SubTitle title="诗集" description="" />
+                <div class="flex flex-wrap gap-y-1 gap-x-2">
+                  {collections.map((collection) => (
+                    // bg-gray-100 dark:bg-gray-800
+                    <a
+                      href={`/collections/${collection.collection_id}`}
+                      class="animated-underline p-1"
+                    >
+                      # {collection.collection}
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div>
+                <SubTitle title="诗集" description="" />
+                <p>暂无内容</p>
+              </div>
+            )
+          }
+          <!-- 作品注解 -->
+          {
+            work.annotation ? (
+              <>
+                <SubTitle title="注解" description="" />
+                <div class="flex justify-start">
+                  <pre class="whitespace-pre-wrap">{work.annotation}</pre>
+                </div>
+              </>
+            ) : (
+              <div>
+                <SubTitle title="注解" description="" />
+                <p>暂无内容</p>
+              </div>
+            )
+          }
+          <!-- 作品简介 -->
+          {
+            work.intro ? (
+              <>
+                <SubTitle title="简介" description="" />
+                <div class="flex justify-start">
+                  <pre class="whitespace-pre-wrap">{work.intro}</pre>
+                </div>
+              </>
+            ) : (
+              <div>
+                <SubTitle title="简介" description="" />
+                <p>暂无内容</p>
+              </div>
+            )
+          }
+        </div>
+
+        <div class="md:flex-1">
+          <!-- 佳句列表 -->
+          {
+            quotes.length > 0 ? (
+              <>
+                <SubTitle title="佳句" description="" />
+                <ul>
+                  {quotes.map((quote) => (
+                    // bg-gray-100 dark:bg-gray-800
+                    <li class="p-1">{quote.quote}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <div>
+                <SubTitle title="佳句" description="" />
+                <p>暂无内容</p>
+              </div>
+            )
+          }
+          <!-- 作品翻译 -->
+          {
+            work.translation != null && work.translation ? (
+              <>
+                <SubTitle title="翻译" description="" />
+                <div class="flex justify-start">
+                  <pre class="whitespace-pre-wrap">{work.translation}</pre>
+                </div>
+              </>
+            ) : (
+              <div>
+                <SubTitle title="翻译" description="" />
+                <p>暂无内容</p>
+              </div>
+            )
+          }
+          <!-- 作品评价 -->
+          {
+            work.master_comment != null && work.master_comment ? (
+              <>
+                <SubTitle title="评价" description="" />
+                <div class="flex justify-start">
+                  <pre class="whitespace-pre-wrap">{work.master_comment}</pre>
+                </div>
+              </>
+            ) : (
+              <div>
+                <SubTitle title="评价" description="" />
+                <p>暂无内容</p>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <SubTitle title="评论区" />
+      <div class="mb-14"></div>
+      <Giscus />
+    </div>
+  </section>
+</Base>

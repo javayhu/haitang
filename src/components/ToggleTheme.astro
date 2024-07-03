@@ -1,0 +1,29 @@
+---
+import { Icon } from 'astro-icon/components';
+
+import { UI } from '@/utils/config';
+
+export interface Props {
+  label?: string;
+  class?: string;
+  iconClass?: string;
+  iconName?: string;
+}
+
+const {
+  label = 'Toggle between Dark and Light mode',
+  class:
+    className = 'rounded-lg text-sm p-2.5 inline-flex items-center hover:bg-gray-200 dark:hover:bg-gray-800',
+  iconClass = 'w-6 h-6',
+  iconName = 'tabler:sun',
+} = Astro.props;
+
+---
+
+{
+  !(UI.theme && UI.theme.endsWith(':only')) && (
+    <button id="toggle-theme-button" type="button" class={className} aria-label={label} data-aw-toggle-color-scheme>
+      <Icon name={iconName} class={iconClass} />
+    </button>
+  )
+}

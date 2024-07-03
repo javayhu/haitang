@@ -1,0 +1,106 @@
+---
+import "@/styles/main.scss";
+
+import config from "@/config/config.json";
+
+import Analytics from "@/layouts/Analytics.astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
+import LoadingIndicator from "astro-loading-indicator/component";
+import { ViewTransitions } from "astro:transitions";
+
+// types for frontmatters
+export interface Props {
+  title?: string;
+  meta_title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  canonical?: string;
+}
+
+// destructure frontmatters
+const { title, meta_title, description, image, noindex, canonical } =
+  Astro.props;
+
+const pageAuthor = config.metadata.meta_author;
+const pageUrl = `${config.site.base_url}/${Astro.url.pathname.replace("/", "")}`;
+const pageTitle = meta_title ? meta_title : title ? title : config.site.title;
+const pageDescription = description ? description : config.metadata.meta_description;
+const pageImage = `${config.site.base_url}${
+  image ? image : config.metadata.meta_image
+}`;
+
+const isProd = import.meta.env.PROD;
+const isVercel = import.meta.env.VERCEL == 1;
+---
+
+<!-- favicon -->
+<link rel="shortcut icon" href={config.site.favicon} />
+<!-- theme meta -->
+<meta name="theme-name" content="haitang" />
+<meta name="msapplication-TileColor" content="#000000" />
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+<meta name="generator" content={Astro.generator} />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- responsive meta -->
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=5"
+/>
+
+<!-- title -->
+<title>
+  {pageTitle}
+</title>
+
+<!-- canonical url -->
+{canonical && <link rel="canonical" href={canonical} item-prop="url" />}
+
+<!-- noindex robots -->
+{noindex && <meta name="robots" content="noindex,nofollow" />}
+
+<!-- site map -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- meta-description -->
+<meta name="description" content={pageDescription} />
+
+<!-- astro view transition -->
+<ViewTransitions />
+<LoadingIndicator color="#9333EA" />
+
+<!-- author from config.json -->
+<meta name="author" content={pageAuthor} />
+
+<!-- og-title -->
+<meta property="og:title" content={pageTitle} />
+
+<!-- og-image -->
+<meta property="og:image" content={pageImage} />
+
+<!-- og-description -->
+<meta property="og:description" content={pageDescription} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={pageUrl} />
+
+<!-- twitter-title -->
+<meta property="twitter:title" content={pageTitle} />
+<!-- twitter-site -->
+<meta property="twitter:site" content={pageUrl} />
+<!-- twitter-description -->
+<meta property="twitter:description" content={pageDescription} />
+<!-- twitter-image -->
+<meta property="twitter:image" content={pageImage} />
+<meta property="twitter:card" content="summary_large_image" />
+
+<!-- Vercel Speed Insights -->
+{
+  isVercel && <SpeedInsights />
+}
+
+<!-- Analytics -->
+{
+  isProd && <Analytics />
+}

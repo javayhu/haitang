@@ -1,0 +1,40 @@
+---
+import config from "@/config/config.json";
+import FavoriteList from "@/components/FavoriteList";
+import Base from "@/layouts/Base.astro";
+import DashboardHeader from "@/partials/DashboardHeader.astro";
+import SubTitle from "@/partials/SubTitle.astro";
+
+export const prerender = false;
+
+const { username, useremail, avatarurl } = Astro.locals;
+
+const title = "个人中心" + " - " + config.site.title;
+
+interface Favorite {
+  id: number;
+  works_id: number;
+  works_title: string;
+  works_author: string;
+  works_dynasty: string;
+}
+
+---
+
+<Base title={title}>
+  <DashboardHeader
+    username={username}
+    useremail={useremail}
+    avatarurl={avatarurl}
+  />
+
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <SubTitle title="收藏诗词" />
+      <div class="mb-14"></div>
+      <!-- 显示诗词收藏列表 -->
+      <FavoriteList client:load />
+      <div class="mb-14"></div>
+    </div>
+  </section>
+</Base>

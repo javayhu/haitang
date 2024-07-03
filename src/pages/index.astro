@@ -1,0 +1,48 @@
+---
+import Base from "@/layouts/Base.astro";
+import CallToAction from "@/partials/CallToAction.astro";
+import Features from "@/partials/Features.astro";
+import Hero from "@/partials/Hero.astro";
+import Testimonials from "@/partials/Testimonials.astro";
+
+export const prerender = true;
+
+const title = "海棠诗社";
+const meta_title = "海棠诗社";
+const description =
+  "海棠诗社，古诗词的数字桃源。" +
+  "海棠诗社按诗集、朝代、诗人、诗词等方式检索，内容丰富，信息齐全。" +
+  "海棠诗社按选集、主题、节日、节气、词牌、时令、地理等方式精选分类。" +
+  "海棠诗社全站响应式布局，兼容移动端，支持暗黑模式，响应速度快。";
+// console.log('index meta:', title, meta_title, description);
+---
+
+<Base title={title} meta_title={meta_title} description={description}>
+  <!-- Hero Section -->
+  <section id="index-section" class="section py-14">
+    <div class="container">
+      <Hero />
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features-section" class="section py-28">
+    <div class="container">
+      <Features />
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials-section" class="section py-28">
+    <div class="container">
+      <Testimonials />
+    </div>
+  </section>
+
+  <!-- CallToAction Section -->
+  <section id="cta-section" class="section py-14 mb-14">
+    <div class="container">
+      <CallToAction />
+    </div>
+  </section>
+</Base>

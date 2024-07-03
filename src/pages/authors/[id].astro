@@ -1,0 +1,85 @@
+---
+import Base from "@/layouts/Base.astro";
+import config from "@/config/config.json";
+import PageHeader from "@/partials/PageHeader.astro";
+import { desc, eq, lt, gte, ne } from "drizzle-orm";
+import { table_authors, table_works } from "@/database/schema_sqlite";
+import { localdb as db } from "@/database/localdb";
+import SubTitle from "@/partials/SubTitle.astro";
+import SimpleSpan from "@/components/SimpleSpan.astro";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const list = await db.select().from(table_authors);
+  return list.map((item) => {
+    return {
+      params: { id: item.id },
+    };
+  });
+}
+
+const { id } = Astro.params;
+
+const author = (
+  await db.select().from(table_authors).where(eq(table_authors.id, id))
+)[0];
+
+const works = await db
+  .select()
+  .from(table_works)
+  .where(eq(table_works.author_id, id))
+  .orderBy(desc(table_works.show_order));
+
+const title = author.name;
+const meta_title = author.name + " - " + config.site.title;
+const description = author.intro ? author.intro.slice(0, 160) : author.name;
+const canonical = config.site.base_url + `/authors/${id}`;
+---
+
+<Base meta_title={meta_title} description={description} canonical={canonical}>
+  <PageHeader title={title} />
+  <section class="section px-4 pt-0 pb-0 mb-14 mx-auto">
+    <div class="container">
+      <!-- 作者简介 -->
+      <SubTitle title="简介" description="" />
+      <SimpleSpan content={author.intro} />
+
+      <!-- 作品列表 -->
+      <SubTitle title="作品" description={`(${works.length})`} />
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        {
+          works.map((work, index) => (
+            <div>
+              <a data-astro-reload
+                href={`/works/${work.id}`}
+                title={work.title}
+                class="text-sm cursor-pointer"
+              >
+                <Card className="hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out">
+                  <CardHeader>
+                    <CardTitle className="text-sm line-clamp-1">
+                      {work.title}
+                      {work.quotes_count >= 2 && ` 🔥`}
+                    </CardTitle>
+                    <CardDescription className="pt-2 text-sm line-clamp-1">
+                      {work.dynasty} - {work.author}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
