@@ -1,6 +1,6 @@
 <h1 align=center>海棠诗社</h1>
 
-<p align=center>https://haitang.app</p>
+<p align=center>https://haitang.app | https://haitang.vercel.app</p>
 
 <p align=center>海棠诗社，古诗词的数字桃源</p>
 
@@ -26,6 +26,8 @@
 ## 🚀 Deployment
 
 Fork这个项目，然后在Vercel中新建项目，选择Github仓库，配置默认即可。
+
+开源版本的海棠诗社：https://haitang.vercel.app
 
 > 注：为简化开源版本的上手时间，我去掉了跟诗词无关的注册登录和诗词收藏逻辑，
   否则还要配置 Supabase + Github OAuth + Resend 等繁杂的操作，这些逻辑跟诗词主体功能相关性不大。
