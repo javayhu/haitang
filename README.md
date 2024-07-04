@@ -37,9 +37,7 @@ Fork这个项目，然后在Vercel中新建项目，选择Github仓库，配置�
 
 - 部署平台的差异：开源版本的海棠诗社是部署在Vercel上，需要科学上网才能访问。现网版本的海棠诗社是部署在Netlify上，绑定了自购域名，所以国内可以直接访问。本项目是纯静态网站，也可以在其他平台上部署，例如CloudFlare。
 
-- 网站功能的差异：为简化开源版本的上手流程，我从现网版本代码中去掉了跟诗词无关的注册登录和诗词收藏逻辑，
-否则还要配置 Supabase + Github OAuth + Resend 等繁琐的步骤，这些逻辑跟学习诗词这个主体功能相关性不大。
-如果确实对注册登录以及诗词收藏等逻辑感兴趣的话，可以看[这次代码提交](https://github.com/javayhu/haitang/commit/d8febb388bc9fe1fdd9a559c3e0e017e7fe5fff2)之前的代码，开源项目中保留了所有功能的代码，感兴趣的可以自行配置。
+- 网站功能的差异：开源版本去掉了注册登录和诗词收藏的功能，原因：为简化开源版本的上手流程。这些功能跟主体的诗词学习功能无关，加上的话还要配置 Supabase + Github OAuth + Resend 等繁琐的步骤才能上手。如果确实对注册登录以及诗词收藏等逻辑感兴趣的话，可以看[这次代码提交](https://github.com/javayhu/haitang/commit/d8febb388bc9fe1fdd9a559c3e0e017e7fe5fff2)之前的代码，开源项目中保留了所有功能的代码，感兴趣的可以自行配置。
 
 
 ## 🚀 Getting Started
