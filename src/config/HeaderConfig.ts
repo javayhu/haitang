@@ -13,10 +13,6 @@ export const headerConfig = {
       href: '/today',
     },
     {
-      text: '我的收藏',
-      href: '/dashboard',
-    },
-    {
       text: '诗集',
       // href: '/collections',
       links: [

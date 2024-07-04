@@ -8,14 +8,11 @@ image: "@/assets/hero.png"
 
 primaryButton:
   enable: true
-  label: "🔥 我要入社"
-  link: "/dashboard"
-  # label: "🔥 我要作诗"
-  # link: "/ai"
+  label: "🔥 每日一诗"
+  link: "/today"
 
 secondaryButton:
   enable: true
-  label: "📚 我要读诗"
-  # link: "/collections"
-  link: "/today"
+  label: "📚 精选诗集"
+  link: "/collections"
 ---
