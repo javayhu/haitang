@@ -13,15 +13,14 @@
 - 🎯 海棠诗社按诗集、朝代、诗人、诗词等方式检索，内容丰富，信息齐全
 - 📝 海棠诗社按选集、主题、节日、节气、词牌、时令、地理等方式精选分类
 - 🔍 海棠诗社全站响应式布局，兼容移动端，支持暗黑模式，响应速度快
-- 👤 海棠诗社支持添加自己喜欢的诗词到个人诗单 
 
 
 ## ✨ Tech Stacks
 
 - 🖥️ Frontend: Astro + Tailwind + Shadcn/ui
-- 📊 Analytics: Umami + Google Analytics
-- 🗂️ Database: SQLite + Drizzle
-- 💬 Comment: Giscus
+- 📊 Analytics: [Umami + Google Analytics](src/layouts/Analytics.astro)
+- 🗂️ Database: [SQLite + Drizzle](src/database/poetry.db)
+- 💬 Comment: [Giscus](src/components/Giscus.astro)
 
 
 ## 🚀 Deployment
@@ -29,8 +28,8 @@
 Fork这个项目，然后在Vercel中新建项目，选择Github仓库，配置默认即可。
 
 > 注：为简化开源版本的上手时间，我去掉了跟诗词无关的注册登录和诗词收藏逻辑，
-  否则要配置 Supabase + Github OAuth + Resend 等繁杂的操作，
-  如果确实对注册登录等逻辑感兴趣的话，可以看[历史代码提交](https://github.com/javayhu/haitang/commit/d8febb388bc9fe1fdd9a559c3e0e017e7fe5fff2)进行探索。
+  否则还要配置 Supabase + Github OAuth + Resend 等繁杂的操作，这些逻辑跟诗词主体功能相关性不大。
+  如果确实对注册登录以及诗词收藏等逻辑感兴趣的话，可以看[这次代码提交](https://github.com/javayhu/haitang/commit/d8febb388bc9fe1fdd9a559c3e0e017e7fe5fff2)之前的代码进行探索。
 
 
 ## 🚀 Getting Started
@@ -52,13 +51,6 @@ yarn dev
 ```bash
 yarn build
 ```
-
-
-## ℹ️ Other Information
-
-- 💬 Comment: [Giscus config file](src/components/Giscus.astro)
-- 📊 Analytics: [Umami + Google Analytics](src/layouts/Analytics.astro)
-- 🗂️ Database: [poetry SQLite file](src/database/poetry.db)
 
 
 ## 📝 License
