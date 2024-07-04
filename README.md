@@ -1,6 +1,6 @@
 <h1 align=center>海棠诗社</h1>
 
-<p align=center>[https://haitang.app](https://haitang.app)</p>
+<p align=center>https://haitang.app</p>
 
 <p align=center>海棠诗社，古诗词的数字桃源</p>
 
@@ -47,9 +47,8 @@ yarn build
 - 💬 Comment: [Giscus config file](src/components/Giscus.astro)
 - 📊 Analytics: [Umami + Google Analytics](src/layouts/Analytics.astro)
 - 🗂️ Database: [poetry SQLite file](src/database/poetry.db)
-- 
 
-<!-- licence -->
+
 ## 📝 License
 
 Copyright (c) 2024 - Present, Designed & Developed by [javayhu](https://javayhu.site)
