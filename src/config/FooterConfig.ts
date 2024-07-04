@@ -1,6 +1,3 @@
-// https://astrowind.vercel.app/
-
-// astro wind footer config
 export const footerConfig = {
     links: [
         {

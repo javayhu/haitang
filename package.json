@@ -10,7 +10,6 @@
     "build": "yarn build_search && yarn build_date && astro build",
     "preview": "astro preview",
     "format": "prettier -w ./src",
-    "json2md": "node scripts/json2md.js",
     "generate": "drizzle-kit generate:sqlite",
     "studio": "drizzle-kit studio",
     "hide-toolbar": "astro preferences disable devToolbar",

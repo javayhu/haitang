@@ -25,22 +25,10 @@ module.exports = {
     },
     extend: {
       colors: {
-        /* text的颜色只需要管前面3种，light、dark、default */
-        /* 也就是说正常只要这3种颜色即可，text-xxx */
-        /* 如果有时候希望字体颜色跟主题色一样，那么就还会用到 text-primary */
-        /* dark可以理解为标题这类primary的文字颜色 */
-        /* text可以理解为正文这类普通的文字颜色 */
-        /* light可以理解为描述这类secondary的文字颜色 */
         text: theme.colors.default.text_color.default,
         light: theme.colors.default.text_color.light,
         dark: theme.colors.default.text_color.dark,
 
-        /* primary可以理解为主题颜色，例如 text-primary / bg-primary */
-        /* secondary可以理解为次要颜色，实际用的不多，例如 text-secondary */
-        /* body可以理解为网页大面积的中间正文背景颜色，例如 bg-body */
-        /* border可以理解为边框颜色，例如 border-border */
-        /* theme-light可以理解为浅色主题，一般用于页面小部分内容的背景色，例如 bg-theme-light */
-        /* theme-dark可以理解为深色主题，一般用于页面小部分内容的背景色，例如 bg-theme-dark */
         primary: theme.colors.default.theme_color.primary,
         secondary: theme.colors.default.theme_color.secondary,
         body: theme.colors.default.theme_color.body,
