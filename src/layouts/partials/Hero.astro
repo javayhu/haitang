@@ -1,5 +1,5 @@
 ---
-import heroImage from "@/assets/hero.png";
+import heroImage from "@/assets/hero.webp";
 import { Picture } from "astro:assets";
 import { getEntry } from "astro:content";
 
@@ -17,7 +17,7 @@ const hero = await getEntry("sections", "hero");
           alt="hero"
           widths={[200, 400, 600]}
           sizes="(max-width: 400px) 100vw, 400px"
-          format="avif"
+          format="webp"
         />
       </div>
 
