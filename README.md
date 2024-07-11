@@ -69,7 +69,8 @@ Thanks to [西窗烛](https://www.xczim.com/)
 
 ## 👨‍💻 独立开发者导航站
 
-如果对独立开发感兴趣的话，不妨关注下 [独立开发者导航站](https://www.indiehackers.site)，发掘最优秀的产品工具，助力你快速发布你的下一个应用！或者关注 [我的推特](https://x.com/javayhu)，我会不定期分享独立开发相关的知识，一起成长，一起开发独立产品出海挣💰
+如果对独立开发感兴趣的话，不妨关注下 [独立开发者导航站](https://www.indiehackers.site)，发掘最优秀的产品工具，助力你快速发布你的下一个应用！
+或者关注 [我的推特](https://x.com/javayhu)，我会不定期分享独立开发相关的知识，一起成长，一起开发独立产品出海挣💰
 
 
 ## 📝 License
@@ -77,3 +78,7 @@ Thanks to [西窗烛](https://www.xczim.com/)
 Copyright (c) 2024 - Present, Designed & Developed by [javayhu](https://x.com/javayhu)
 
 **Code License:** Released under the [MIT](LICENSE) license.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=javayhu/haitang&type=Date)](https://star-history.com/#javayhu/haitang&Date)
