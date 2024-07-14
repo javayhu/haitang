@@ -27,6 +27,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'sans': ['var(--custom-font)', ...defaultTheme.fontFamily.sans],
+        'mono': ['var(--custom-font)', ...defaultTheme.fontFamily.mono],
       },
       colors: {
         text: theme.colors.default.text_color.default,
