@@ -25,7 +25,7 @@ import { UI } from "@/utils/config";
       if (font) {
         font = JSON.parse(font);
         font.fontLinks.forEach(loadStyles);
-        document.documentElement.style.setProperty("--custom-font", font.fontFamily);
+        document.documentElement.style.setProperty("--custom-font", JSON.stringify(font.fontFamily));
       }
     } catch (e) {
       console.error("initCustomFont error", e);
