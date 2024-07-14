@@ -222,6 +222,7 @@ import { UI } from "@/utils/config";
 
   document.addEventListener("astro:after-swap", () => {
     console.log("astro:after-swap, init theme");
+    initCustomFont();
     initTheme();
     onLoad();
     onPageShow();
