@@ -1,3 +1,4 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
 const theme = require("./src/config/theme.json");
 
 /** @type {import('tailwindcss').Config} */
@@ -24,6 +25,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        'sans': ['var(--custom-font)', ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         text: theme.colors.default.text_color.default,
         light: theme.colors.default.text_color.light,

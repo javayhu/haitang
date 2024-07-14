@@ -10,6 +10,29 @@ import { UI } from "@/utils/config";
 
   window.basic_script = true;
 
+  function initCustomFont() {
+    function loadStyles(url){
+      var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = url;
+        var head = document.getElementsByTagName("head")[0];
+        head.appendChild(link);
+    }
+
+    try {
+      let font = localStorage.getItem("custom-font");
+      if (font) {
+        font = JSON.parse(font);
+        font.fontLinks.forEach(loadStyles);
+        document.documentElement.style.setProperty("--custom-font", font.fontFamily);
+      }
+    } catch (e) {
+      console.error("initCustomFont error", e);
+    }
+  };
+  initCustomFont();
+
   // change giscus theme
   // https://thezal.dev/article_giscus_astro/
   function setGiscusTheme(theme) {
