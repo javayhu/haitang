@@ -9,7 +9,6 @@ import {
 } from "@/database/schema_sqlite";
 import { localdb as db } from "@/database/localdb";
 import SubTitle from "@/partials/SubTitle.astro";
-import Giscus from "@/components/Giscus.astro";
 
 export const prerender = true;
 
@@ -219,9 +218,6 @@ const canonical = config.site.base_url + `/works/${id}`;
         </div>
       </div>
 
-      <SubTitle title="评论区" />
-      <div class="mb-14"></div>
-      <Giscus />
     </div>
   </section>
 </Base>

@@ -1,6 +1,6 @@
 ---
 enable: true
-title: "诗词爱好者 💖 海棠诗社"
+title: "风雅之韵，汇聚于枢"
 # description: "宴集诗人于风庭月榭，醉飞吟盏于帘杏溪桃"
 # description: "或竖词坛，或开吟社，虽一时之偶兴，遂成千古之佳谈"
 description: "诗词爱好者陆续入社中..."

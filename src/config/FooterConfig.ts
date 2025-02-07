@@ -46,7 +46,7 @@ export const footerConfig = {
         { text: '服务条款', href: '/terms-of-service' },
         { text: '隐私政策', href: '/privacy-policy' },
         { text: '站点地图', href: '/sitemap-index.xml' },
-        { text: '关于诗社', href: '/about' },
+        { text: '关于哦们', href: '/about' },
     ],
     socialLinks: [
         // { ariaLabel: 'X', icon: 'tabler:brand-x', href: 'https://twitter.com/javayhu' },
@@ -55,5 +55,5 @@ export const footerConfig = {
         // { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: '#' },
         // { ariaLabel: 'RSS', icon: 'tabler:rss', href: '/rss.xml' },
     ],
-    footNote: '© 2024 All Rights Reserved.',
+    footNote: '© 2025 All Rights Reserved.',
 };

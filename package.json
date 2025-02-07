@@ -1,8 +1,8 @@
 {
-  "name": "haitang",
+  "name": "fengyashu",
   "version": "1.0.0",
-  "description": "海棠诗社，古诗词的数字桃源",
-  "author": "javayhu",
+  "description": "风雅枢，中国古典诗词文化核心",
+  "author": "jiyong",
   "license": "MIT",
   "packageManager": "yarn@1.22.19",
   "scripts": {

@@ -1,8 +1,6 @@
 ---
 enable: true
-# title: "海棠诗社，古诗词的数字桃源"
-title: "古韵今风，海棠诗梦间"
-# description: "当科技与艺术融合，诗词创作从此变得更有趣"
+title: "风雅之韵，汇聚于枢"
 description: "当科技与艺术融合，诗词创作从此变得更有趣"
 image: "@/assets/hero.png"
 

@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /api/*
 
-Sitemap: https://haitang.app/sitemap-index.xml
+Sitemap: https://fengyashu.com/sitemap-index.xml

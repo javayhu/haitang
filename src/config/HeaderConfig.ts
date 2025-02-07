@@ -1,4 +1,6 @@
 export const headerConfig = {
+  showTwitter: false,
+  showGithub: false,
   links: [
     {
       text: '首页',
