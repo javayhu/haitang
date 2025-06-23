@@ -6,6 +6,8 @@ import ToggleTheme from "@/components/ToggleTheme.astro";
 import ToggleMenu from "@/components/ToggleMenu.astro";
 import HeaderBackground from "@/layouts/partials/HeaderBackground.astro";
 
+import ChangeFont from "@/helpers/ChangeFont";
+
 import { trimSlash, getAsset } from "@/utils/permalinks";
 import { Button } from "@/components/ui/button";
 
@@ -33,6 +35,7 @@ export interface Props {
   isFullWidth?: boolean;
   showSearch?: boolean;
   showToggleTheme?: boolean;
+  showChangeFont?: boolean;
   showRssFeed?: boolean;
   showTwitter?: boolean;
   showGithub?: boolean;
@@ -48,6 +51,7 @@ const {
   isFullWidth = false,
   showSearch = false,
   showToggleTheme = false,
+  showChangeFont = false,
   showRssFeed = false,
   showTwitter = false,
   showGithub = false,
@@ -171,6 +175,15 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
           {
             showToggleTheme && (
               <ToggleTheme iconClass="w-6 h-6 block md:w-5 md:h-5 md:inline-block" />
+            )
+          }
+
+          <!-- change font -->
+          {
+            showChangeFont && (
+              <ChangeFont client:load>
+                <Icon name="tabler:language" class="w-6 h-6 block md:w-5 md:h-5 md:inline-block" />
+              </ChangeFont>
             )
           }
 
